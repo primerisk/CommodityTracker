@@ -164,7 +164,7 @@ def main():
         st.subheader("Gold / Silver Ratio & Others")
 
         # Layout: Img1 - Select1 - Swap - Select2 - Img2
-        c1, c2, c3, c4, c5 = st.columns([1, 3, 1, 3, 1])
+        c1, c2, c3, c4, c5 = st.columns([1, 3, 1.5, 3, 1])
         
         with c1:
             st.image(f"assets/{st.session_state.num}.png", use_container_width=True)
@@ -175,7 +175,7 @@ def main():
         with c3:
             st.write("")
             st.write("")
-            st.button("↔", help="Swap", on_click=swap_assets)
+            st.button("🔄 Swap Assets", help="Swap Numerator and Denominator", on_click=swap_assets, use_container_width=True)
 
         with c4:
             st.selectbox("Denominator", list(TICKERS.keys()), key="den")
