@@ -120,5 +120,5 @@ def join_metal_data(metals_list, period="5y"):
         return pd.DataFrame()
         
     # Join all dataframes on the Date index
-    result = pd.concat(dfs, axis=1).dropna()
+    result = pd.concat(dfs, axis=1)
     return result

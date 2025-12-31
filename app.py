@@ -6,7 +6,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from data_loader import get_current_price, join_metal_data, TICKERS, get_ticker_metrics
 
-APP_VERSION = "v1.2.1"
+APP_VERSION = "v1.2.2"
 
 st.set_page_config(page_title="Precious Metal Tracker", layout="wide", page_icon="🪙")
 
@@ -190,7 +190,7 @@ def main():
             st.warning("Select different assets to calculate a ratio.")
         else:
             ratio_name = f"{ratio_choice_1} / {ratio_choice_2} Ratio"
-            ratio_series = df[ratio_choice_1] / df[ratio_choice_2]
+            ratio_series = (df[ratio_choice_1] / df[ratio_choice_2]).dropna()
             
             # Statistics
             curr_ratio = ratio_series.iloc[-1]
