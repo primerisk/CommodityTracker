@@ -4,7 +4,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from data_loader import get_current_price, join_metal_data, TICKERS
+from data_loader import get_current_price, join_metal_data, TICKERS, get_ticker_metrics
 
 st.set_page_config(page_title="Precious Metal Tracker", layout="wide", page_icon="🪙")
 
@@ -106,14 +106,14 @@ def main():
     
     cols = st.columns(len(TICKERS))
     for i, metal in enumerate(TICKERS.keys()):
-        price = get_current_price(metal)
+        price, change, pct_change = get_ticker_metrics(metal)
         with cols[i]:
             # Nested columns for Icon + Metric
             c_img, c_met = st.columns([1, 2])
             with c_img:
                 st.image(f"assets/{metal}.png", use_container_width=True)
             with c_met:
-                st.metric(label=metal, value=f"${price:,.2f}")
+                st.metric(label=metal, value=f"${price:,.2f}", delta=f"{change:,.2f} ({pct_change:.2f}%)")
 
     # --- Data Fetching ---
     with st.spinner(f"Fetching historical data ({selected_period})..."):

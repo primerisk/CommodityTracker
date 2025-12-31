@@ -68,6 +68,44 @@ def get_current_price(symbol_key):
     
     return 0.0
 
+def get_ticker_metrics(symbol_key):
+    """
+    Fetches the latest price, change, and percent change.
+    Returns: (price, change, pct_change)
+    """
+    ticker = TICKERS.get(symbol_key)
+    if not ticker:
+        return 0.0, 0.0, 0.0
+        
+    t = yf.Ticker(ticker)
+    
+    try:
+        current = t.fast_info['last_price']
+        prev = t.fast_info['previous_close']
+        
+        if current and prev:
+            change = current - prev
+            pct_change = (change / prev) * 100
+            return current, change, pct_change
+    except:
+        pass
+        
+    # Fallback to history
+    try:
+        df = t.history(period="5d")
+        if len(df) >= 2:
+            current = df['Close'].iloc[-1]
+            prev = df['Close'].iloc[-2]
+            change = current - prev
+            pct_change = (change / prev) * 100
+            return current, change, pct_change
+        elif len(df) == 1:
+             return df['Close'].iloc[-1], 0.0, 0.0
+    except:
+        pass
+
+    return 0.0, 0.0, 0.0
+
 def join_metal_data(metals_list, period="5y"):
     """
     Fetches and joins data for multiple metals into a single DataFrame.
