@@ -6,6 +6,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from data_loader import get_current_price, join_metal_data, TICKERS, get_ticker_metrics
 
+APP_VERSION = "v1.1.0"
+
 st.set_page_config(page_title="Precious Metal Tracker", layout="wide", page_icon="🪙")
 
 @st.cache_data(ttl=300)
@@ -45,9 +47,13 @@ def swap_assets():
     st.session_state.num, st.session_state.den = st.session_state.den, st.session_state.num
 
 def main():
-    # --- Dark Mode Logic ---
+    # --- Session State Initialization ---
     if "dark_mode" not in st.session_state:
         st.session_state.dark_mode = False
+    if "num" not in st.session_state:
+        st.session_state.num = "Gold"
+    if "den" not in st.session_state:
+        st.session_state.den = "Silver"
 
     def toggle_dark_mode():
         st.session_state.dark_mode = not st.session_state.dark_mode
@@ -156,12 +162,6 @@ def main():
     # --- Tab 2: Ratio Analysis ---
     with tab2:
         st.subheader("Gold / Silver Ratio & Others")
-        
-        # Initialize session state for selectors if not present
-        if "num" not in st.session_state:
-            st.session_state.num = "Gold"
-        if "den" not in st.session_state:
-            st.session_state.den = "Silver"
 
         # Layout: Img1 - Select1 - Swap - Select2 - Img2
         c1, c2, c3, c4, c5 = st.columns([1, 3, 1, 3, 1])
@@ -233,11 +233,13 @@ def main():
     
     ip_address = get_public_ip()
     
-    footer_col1, footer_col2 = st.columns(2)
+    footer_col1, footer_col2, footer_col3 = st.columns(3)
     with footer_col1:
         st.caption(f"Time since last update: {ts_str}")
     with footer_col2:
         st.caption(f"Requestor IP: {ip_address}")
+    with footer_col3:
+        st.caption(f"Version: {APP_VERSION}")
 
 if __name__ == "__main__":
     main()
