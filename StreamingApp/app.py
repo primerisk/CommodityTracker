@@ -6,31 +6,14 @@ from utils import get_full_image_url, format_provider_data
 # --- Configuration ---
 st.set_page_config(page_title="StreamCheck", page_icon="🎬", layout="wide")
 
-# Initialize Session State
-if 'tmdb_client' not in st.session_state:
-    # In a real app, you might use st.secrets, but here we take input or hardcode locally
-    # asking user for key in sidebar if not present
-    st.session_state.api_key = None
-
-# --- sidebar ---
-with st.sidebar:
-    st.header("Settings")
-    api_key_input = st.text_input("TMDB API Key", type="password")
-    if api_key_input:
-        st.session_state.api_key = api_key_input
-    
-    st.markdown("---")
-    st.markdown("Data provided by [TMDB](https://www.themoviedb.org/).")
+# Hardcoded API Key
+API_KEY = "a750ef270fc15094c242c9719f90034c"
 
 # --- Main App ---
 st.title("🎬 Where is it Streaming?")
 st.markdown("Find out where to watch your favorite movies and TV shows.")
 
-if not st.session_state.api_key:
-    st.warning("Please enter your TMDB API Key in the sidebar to continue.")
-    st.stop()
-
-client = TMDBClient(st.session_state.api_key)
+client = TMDBClient(API_KEY)
 
 # Search
 query = st.text_input("Search for a movie or TV show...", placeholder="e.g. Inception, Breaking Bad")
